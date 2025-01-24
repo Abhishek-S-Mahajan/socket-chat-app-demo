@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App Demo</title>
+</head>
+
+<body>
+
+    <div id="user-list">
+        <h3>Online Users:</h3>
+
+        <ul id="users">
+
+        </ul>
+    </div>
+
+    <div id="chat"></div>
+
+    <form action="" id="message-form">
+        <input type="text" id="message-input" placeholder="Enter your message..." required />
+        <button type="submit">Send</button>
+    </form>
+
+
+    <!-- @desc: By default, Socket.IO exposes a client bundle -->
+    <script src="/socket.io/socket.io.js"></script>
+
+    <!-- @desc: custom script logic -->
+    <script>
+        const socket = io();
+
+        const userList = document.querySelector("#users");
+        const chat = document.querySelector("#chat");
+        const messageForm = document.querySelector("#message-form");
+        const messageInput = document.querySelector("#message-input");
+
+        const username = prompt("Enter your username:");
+
+        //@desc: emit event when a user joins the chat
+        socket.emit("join", username);
+
+        //@desc: handle an event when a new user has joined the chat
+        socket.on("user-joined", (user) => {
+            addMessage(`${user} has joined the chat.`);
+        });
+
+        //@desc: handle an event when a user has left the chat
+        socket.on("user-left", (user) => {
+            addMessage(`${user} has left the chat!`);
+        });
+
+        //@desc: update the list accordingly
+        socket.on("user-list", (usersArr) => {
+            userList.innerHTML = usersArr.map((user) => `<li>${user}</li>`).join("")
+        });
+
+        //@desc: handle the chat message events from the server
+        socket.on("chat-message", ({ username, text }) => {
+            addMessage(`${username}: ${text}`);
+        });
+
+        //@desc: handle form submission
+        messageForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const message = messageInput.value.trim();
+
+            if (message) {
+                socket.emit("chat-message", { username, text: message });
+                messageInput.value = "";
+            }
+        });
+
+
+        function addMessage(input) {
+            const messageElement = document.createElement("DIV");
+            messageElement.textContent = input;
+            chat.appendChild(messageElement);
+            //@desc: scroll to the bottom of the chat container
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+
+
+
+
+
+
+    </script>
+
+</body>
+
+</html>

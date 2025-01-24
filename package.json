@@ -1,0 +1,25 @@
+{
+  "name": "socket-chat-app-demo",
+  "version": "1.0.0",
+  "description": "working with socket.io",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node --watch --env-file=.env server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Abhishek-S-Mahajan/socket-chat-app-demo.git"
+  },
+  "author": "Abhishek Mahajan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Abhishek-S-Mahajan/socket-chat-app-demo/issues"
+  },
+  "homepage": "https://github.com/Abhishek-S-Mahajan/socket-chat-app-demo#readme",
+  "dependencies": {
+    "express": "^4.21.2",
+    "socket.io": "^4.8.1"
+  }
+}
